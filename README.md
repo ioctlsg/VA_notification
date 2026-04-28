@@ -48,3 +48,20 @@ docker run -d \
   -w /app \
   python:3.11-slim python notifier.py
 ```
+
+## CI/CD + DevSecOps
+
+This repo includes a GitHub Actions workflow at `.github/workflows/ci-cd-devsecops.yml`.
+
+It runs:
+- Python syntax checks
+- `ruff` linting
+- Snyk code security scanning
+
+### Required GitHub secret
+
+Add this repository secret in GitHub before expecting the Snyk stage to run:
+
+- `SNYK_TOKEN`
+
+Without `SNYK_TOKEN`, the quality job still runs, but the Snyk security job is skipped.

@@ -154,21 +154,6 @@ def send_telegram_photo_bytes(photo_bytes: bytes, caption: str, mime_type: str =
         return json.load(resp)
 
 
-def cooldown_key(camera: str, label: str):
-    return f'{camera}:{label}'
-
-
-def should_send(camera: str, label: str, now: float, last_sent: dict):
-    key = cooldown_key(camera, label)
-    previous = float(last_sent.get(key, 0))
-    return (now - previous) >= COOLDOWN_SECONDS
-
-
-def mark_sent(camera: str, label: str, now: float, last_sent: dict):
-    last_sent[cooldown_key(camera, label)] = now
-    save_last_sent(last_sent)
-
-
 def main():
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print('Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID', flush=True)

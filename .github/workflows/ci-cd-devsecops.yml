@@ -13,6 +13,9 @@ permissions:
   contents: read
   security-events: write
 
+env:
+  SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
 jobs:
   quality:
     name: Quality Checks
@@ -40,7 +43,7 @@ jobs:
     name: Snyk Code Security Scan
     runs-on: ubuntu-latest
     needs: quality
-    if: ${{ secrets.SNYK_TOKEN != '' }}
+    if: ${{ env.SNYK_TOKEN != '' }}
 
     steps:
       - name: Checkout repository
@@ -55,11 +58,7 @@ jobs:
         uses: snyk/actions/setup@master
 
       - name: Authenticate Snyk
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: snyk auth "$SNYK_TOKEN"
 
       - name: Run Snyk code test
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: snyk code test --severity-threshold=high
